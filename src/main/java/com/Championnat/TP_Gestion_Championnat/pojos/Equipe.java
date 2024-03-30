@@ -27,7 +27,7 @@ public class Equipe {
     public Equipe() {
     }
 
-    public Equipe( String logo, String nom, Date dateCreation, String nomEntrainneur, String president, String siege, String telephone, String siteWeb) {
+    public Equipe( String logo, String nom, Date dateCreation, String status,Long idStade,String nomEntrainneur, String president, String siege, String telephone, String siteWeb) {
 
         this.logo = logo;
         this.nom = nom;
@@ -37,14 +37,18 @@ public class Equipe {
         this.siege = siege;
         this.telephone = telephone;
         this.siteWeb = siteWeb;
+        this.idStade = idStade;
+        this.status = status;
     }
     // relation exterieur
    @ManyToMany(mappedBy = "equipes")
     private List<Championnat> championnats;
    @ManyToOne
     private Stade stade;
+   // getter et setter
 
-   public Long getId() {
+
+    public Long getId() {
         return id;
     }
 
@@ -52,8 +56,92 @@ public class Equipe {
         this.id = id;
     }
 
+    public String getNomEntrainneur() {
+        return nomEntrainneur;
+    }
+
+    public void setNomEntrainneur(String nomEntrainneur) {
+        this.nomEntrainneur = nomEntrainneur;
+    }
+
+    public String getPresident() {
+        return president;
+    }
+
+    public void setPresident(String president) {
+        this.president = president;
+    }
+
+    public String getSiege() {
+        return siege;
+    }
+
+    public void setSiege(String siege) {
+        this.siege = siege;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getSiteWeb() {
+        return siteWeb;
+    }
+
+    public void setSiteWeb(String siteWeb) {
+        this.siteWeb = siteWeb;
+    }
+
     public String getNom() {
         return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Long getIdStade() {
+        return idStade;
+    }
+
+    public void setIdStade(Long idStade) {
+        this.idStade = idStade;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public List<Championnat> getChampionnats() {
+        return championnats;
+    }
+
+    public void setChampionnats(List<Championnat> championnats) {
+        this.championnats = championnats;
     }
 
     public Stade getStade() {
@@ -64,18 +152,7 @@ public class Equipe {
         this.stade = stade;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
 
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
     @Override
     public String toString() {
        final StringBuilder sb = new StringBuilder("Equipe{");

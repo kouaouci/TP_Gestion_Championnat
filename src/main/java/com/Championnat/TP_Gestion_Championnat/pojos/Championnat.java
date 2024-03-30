@@ -16,19 +16,19 @@ public class Championnat {
     private String logo;
     private Date dateDebut;
     private Date dateFin;
-    private Integer pointGagner;
+    private Integer pointGagne;
     private Integer pointPerdu;
     private Integer pointNul;
     private String typeClassement;
 
     public Championnat() {
     }
-    public Championnat(String nom, String logo, Date dateDebut, Date dateFin, Integer pointGagner, Integer pointPerdu, Integer pointNul, String typeClassement) {
+    public Championnat(String nom, String logo, Date dateDebut, Date dateFin, Integer pointGagne, Integer pointPerdu, Integer pointNul, String typeClassement) {
         this.nom = nom;
         this.logo = logo;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
-        this.pointGagner = pointGagner;
+        this.pointGagne = pointGagne;
         this.pointPerdu = pointPerdu;
         this.pointNul = pointNul;
         this.typeClassement = typeClassement;
@@ -36,10 +36,10 @@ public class Championnat {
     //relation
     @ManyToOne
     private Pays pays;
-    @ManyToMany//(mappedBy = "championnat")
+    @ManyToMany
 
     private List<Equipe> equipes;
-    @OneToMany(mappedBy="championnat")
+    @OneToMany(mappedBy="championnat",fetch = FetchType.EAGER)
     private List<Journee> journees;
 
 
@@ -75,10 +75,10 @@ public class Championnat {
         this.dateFin = dateFin;
     }
     public Integer getPointGagner() {
-        return pointGagner;
+        return pointGagne;
     }
-    public void setPointGagner(Integer pointGagner) {
-        this.pointGagner = pointGagner;
+    public void setPointGagner(Integer pointGagne) {
+        this.pointGagne = pointGagne;
     }
     public Integer getPointPerdu() {
         return pointPerdu;

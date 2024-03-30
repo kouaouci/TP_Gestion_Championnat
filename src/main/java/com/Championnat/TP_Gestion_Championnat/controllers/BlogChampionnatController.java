@@ -2,7 +2,6 @@ package com.Championnat.TP_Gestion_Championnat.controllers;
 
 import com.Championnat.TP_Gestion_Championnat.Service.*;
 import com.Championnat.TP_Gestion_Championnat.pojos.*;
-import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +35,7 @@ public class BlogChampionnatController {
     }
 
     public BlogChampionnatController(UserService userService, PaysService paysService, ChampionnatService championnatService, EquipeService equipeService, JourneeService journeeService, MatchService matchService, StadeService stadeService) {
+        super();
         this.userService = userService;
         this.paysService = paysService;
         this.championnatService = championnatService;
@@ -45,15 +45,16 @@ public class BlogChampionnatController {
         this.stadeService = stadeService;
     }
 
-    @GetMapping({ "/","accueil"})
+      //User
+      @GetMapping({"/", "login"})
+      public String login() {
+          return "login";
+      }
+    @GetMapping({ "accueil"})
     public String accueil() {
         return "accueil";
     }
 
-    @GetMapping({"/", "login"})
-    public String login() {
-        return "login";
-    }
 
 
 
@@ -72,12 +73,13 @@ public class BlogChampionnatController {
 
         if (connected) {
             return new RedirectView("accueil");
+
         } else {
             return new RedirectView("");
         }
     }
 
-    @GetMapping({"addUser("})
+    @GetMapping({"addUser"})
     public String addUser() {
         return "create";
     }
@@ -142,21 +144,19 @@ public class BlogChampionnatController {
 
     //endregion
     //region Championnat
-    @GetMapping({"details_championat"})
-    public String details_championat(Model model, @RequestParam long idChampionat) {
-        Championnat championat = championnatService.recupererChampionnat(idChampionat);
-        List<Equipe> equipes = championat.getEquipes();
-        List<Journee> journees = championat.getJournees();
+    @GetMapping({"details_championnat"})
+    public String details_championnat(Model model, @RequestParam long idChampionnat) {
+        Championnat championnat = championnatService.recupererChampionnat(idChampionnat);
+        List<Equipe> equipes = championnat.getEquipes();
+        List<Journee> journees = championnat.getJournees();
         journees.sort(Comparator.comparing(Journee::getNumero).reversed());
         List<Matchs> matches = new ArrayList<>();
-        List<EquipeChampionnat> equipeChampionatStats = new ArrayList<>();
+        List<EquipeChampionnat> equipeChampionnat = new ArrayList<>();
         for (Journee journee : journees) {
-            for (Matchs match : journee.getMatches()) {
-                matches.add(match);
-            }
+            matches.addAll(journee.getMatches());
         }
         for (Equipe equipe : equipes) {
-            Integer totalPoint = 0;
+            int totalPoint = 0;
             Integer matchGagnee = 0;
             Integer matchPerdu = 0;
             Integer matchNul = 0;
@@ -194,12 +194,12 @@ public class BlogChampionnatController {
                 }
             }
             EquipeChampionnat equipeStats = new EquipeChampionnat(equipe, totalPoint, matchGagnee, matchPerdu, matchNul, maxJournee);
-            equipeChampionatStats.add(equipeStats);
+            equipeChampionnat.add(equipeStats);
         }
-        equipeChampionatStats.sort(Comparator.comparing(EquipeChampionnat::getTotalPoint).reversed());
+        equipeChampionnat.sort(Comparator.comparing(EquipeChampionnat::getTotalPoint).reversed());
 
-        model.addAttribute("championat", championat);
-        model.addAttribute("equipeChampionatStats", equipeChampionatStats);
+        model.addAttribute("championnat", championnat);
+        model.addAttribute("equipeChampionnat", equipeChampionnat);
         return "indexClassement";
     }
 
@@ -210,17 +210,17 @@ public class BlogChampionnatController {
 
     @GetMapping({"/championnat/{championnatId}/jours/{journeeId}/resultatsListe"})
     public String listResultatsOfChampionnatAndJournee(Model model, @PathVariable long championnatId, @PathVariable long journeeId) {
-        Championnat championat = championnatService.recupererChampionnat(championnatId);
+        Championnat championnat = championnatService.recupererChampionnat(championnatId);
         Journee journee = journeeService.recupererJournee(journeeId);
         HashMap<String, List<Matchs>> allMatchOfChampionnat = new HashMap<>();
-        List<Journee> journees = championat.getJournees();
+        List<Journee> journees = championnat.getJournees();
 
         List<Matchs> allMatchOfJournee = journee.getMatches();
 
         allMatchOfChampionnat.put(journee.getNumero().toString(), allMatchOfJournee);
 
         model.addAttribute("allJournees", journees);
-        model.addAttribute("championnat", championat);
+        model.addAttribute("championnat", championnat);
         model.addAttribute("allMatchForAllJournees", allMatchOfChampionnat);
 
         return "liste";
@@ -229,44 +229,45 @@ public class BlogChampionnatController {
     @GetMapping({"/championnat/{id}/resultatsListe"})
     public String listResultatsOfChampionnat(Model model, @PathVariable long id) {
         Equipe equipe = equipeService.recupererEquipe(id);
-        Championnat championat = championnatService.recupererChampionnat(id);
+        Championnat championnat = championnatService.recupererChampionnat(id);
         HashMap<String, List<Matchs>> allMatchOfChampionnat = new HashMap<>();
 
-        List<Journee> journees = championat.getJournees();
+        List<Journee> journees = championnat.getJournees();
         for (Journee journee : journees) {
             List<Matchs> allMatchOfJournee = journee.getMatches();
 
             allMatchOfChampionnat.put(journee.getNumero().toString(), allMatchOfJournee);
         }
         model.addAttribute("allJournees", journees);
-        model.addAttribute("championnat", championat);
+        model.addAttribute("championnat", championnat);
         model.addAttribute("allMatchForAllJournees", allMatchOfChampionnat);
 
         return "liste";
     }
 
-    @GetMapping({"championnats"})
+    @GetMapping({"/championnats"})
     public String championnats(Model model) {
-        List<Championnat> championats = championnatService.recupererChampionnatAll();
-        model.addAttribute("championnats", championats);
-        return "indexListeRes";
+        List<Championnat> championnats = championnatService.recupererChampionnatAll();
+        model.addAttribute("championnats", championnats);
+        return "indexList" +
+                "Res";
     }
 
     @GetMapping({"championnat/newChampionnat"})
-    public String newChampionnat(Model model, @ModelAttribute Championnat championat) {
+    public String newChampionnat(Model model, @ModelAttribute Championnat championnat) {
         List<Pays> pays = paysService.recupererPaysAll();
         model.addAttribute("allPays", pays);
-        model.addAttribute("championnat", championat);
-        return "championnatDetail";
+        model.addAttribute("championnat", championnat);
+        return "championnatForm";
     }
 
     @PostMapping(value = "championnat/saveChampionnat")
-    public RedirectView saveChampionnat(Model model, @Validated @ModelAttribute Championnat championat, @RequestParam long paysId) {
+    public RedirectView saveChampionnat(Model model, @Validated @ModelAttribute Championnat championnat, @RequestParam long paysId) {
         Pays pays = paysService.recupererPays(paysId);
-        championat.setPays(pays);
-        championat = championnatService.ajouterChampionnat(championat);
-        model.addAttribute("championnat", championat);
-        return new RedirectView("championnat/" + championat.getId() + "/resultatsListe");
+        championnat.setPays(pays);
+        championnat = championnatService.ajouterChampionnat(championnat);
+        model.addAttribute("championnat", championnat);
+        return new RedirectView("/championnats" );
     }
 
 
@@ -395,58 +396,23 @@ public class BlogChampionnatController {
             );
             stadeService.ajouterStade(stade4);
 
+
             Equipe equipe1 = new Equipe(
                     "logo_psg.png",
                     "Paris Saint Germain",
-                    Date.valueOf("1970-08-12"),
+                    Date.valueOf("1970-01-01"),
+                    "Actif",
+                    stade1.getId(),
                     "Mauricio Pochettino",
                     "Nasser Al-Khelaïfi",
-                    "24 Rue du Commandant Guilbaud, 75016 Paris",
-                    "01 47 43 71 71",
-                    "https://www.psg.fr/"
+                    "Paris",
+                    "0144556677",
+                    "www.psg.fr"
             );
-            equipe1.setStade(stade1);
+            equipe1.setStade(stade4);
             equipeService.ajouterEquipe(equipe1);
 
-            Equipe equipe2 = new Equipe(
-                    "logo_om.png",
-                    "Olympique de Marseille",
-                    Date.valueOf("1899-08-31"),
-                    "Jorge Sampaoli",
-                    "Pablo Longoria",
-                    "3 Boulevard Michelet, 13008 Marseille",
-                    "04 91 76 56 00",
-                    "https://www.om.fr/"
-            );
-            equipe2.setStade(stade2);
-            equipeService.ajouterEquipe(equipe2);
 
-            Equipe equipe3 = new Equipe(
-                    "logo_ol.png",
-                    "Olympique Lyonnais",
-                    Date.valueOf("1950-08-01"),
-                    "Peter Bosz",
-                    "Jean-Michel Aulas",
-                    "Parc Olympique Lyonnais, 10 Avenue Simone Veil, 69150 Décines-Charpieu",
-                    "04 81 07 55 00",
-                    "https://www.ol.fr/"
-            );
-            equipe3.setStade(stade3);
-            equipeService.ajouterEquipe(equipe3);
-
-            Equipe equipe4 = new Equipe(
-                    "logo_asse.png",
-                    "Association Sportive de Saint-Étienne",
-                    Date.valueOf("1919-08-01"),
-                    "Claude Puel",
-                    "Roland Romeyer",
-                    "14 Rue de la Montat, 42000 Saint-Étienne",
-                    "04 77 74 48 00",
-                    "https://www.asse.fr/"
-            );
-
-            equipe4.setStade(stade4);
-            equipeService.ajouterEquipe(equipe4);
 
 
 

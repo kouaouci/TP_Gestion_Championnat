@@ -15,7 +15,16 @@ public class Journee {
 
     public Journee() {
     }
-    public Journee(int numero) {
+
+    public Championnat getChampionnat() {
+        return championnat;
+    }
+
+    public void setChampionnat(Championnat championnat) {
+        this.championnat = championnat;
+    }
+
+    public Journee(Integer numero) {
         this.numero = numero;
     }
     @ManyToOne

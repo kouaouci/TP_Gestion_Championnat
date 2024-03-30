@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Championnats</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-3"><strong>Liste des championats</strong></h2>
+        </div>
+        <div class="col-12">
+            <table class="table">
+                <tbody>
+                <tr data-th-each="championnat : ${championnats}">
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="col-1">
+                                <img data-th-src="@{/img/{logo}(logo=${championnat.logo})}" alt="Logo" width="50" height="50">
+                            </div>
+                            <div class="col-4">
+                                <h5 data-th-text="${championnat.nom}">Coupe du monde</h5>
+                            </div>
+                            <div class="col-3">
+                                <a data-th-href="@{/championnat/{id}/resultatsListe(id=${championnat.id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">liste des matchs</a>
+                            </div>
+                            <div class="col-4">
+                                <a data-th-href="@{'/details_championnat?idChampionnat=' + ${championnat.id}}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">classement</a>
+                            </div>
+                        </div>
+                        <div class="bar-thin bg-light mt-2 mb-2" style="height: 2px;"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="col-12">
+                <a data-th-href="@{/championnat/newChampionnat}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">ajouter un championnat</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>

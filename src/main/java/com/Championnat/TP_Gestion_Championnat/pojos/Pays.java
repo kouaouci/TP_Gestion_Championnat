@@ -9,7 +9,17 @@ public class Pays {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nom;
+    private String logo;
+    @OneToMany(mappedBy = "pays")
+   private List<Championnat> championnats;
 
+    public Pays() {
+    }
+    public Pays(String nom, String logo) {
+        this.nom = nom;
+        this.logo = logo;
+    }
     public Long getId() {
         return id;
     }
@@ -35,23 +45,11 @@ public class Pays {
     }
 
     public List<Championnat> getChampionats() {
-        return championats;
+        return championnats;
     }
 
     public void setChampionats(List<Championnat> championats) {
-        this.championats = championats;
-    }
-
-    private String nom;
-    private String logo;
-    @OneToMany(mappedBy = "pays")
-   private List<Championnat> championats;
-
-    public Pays() {
-    }
-    public Pays(String nom, String logo) {
-        this.nom = nom;
-        this.logo = logo;
+        this.championnats = championats;
     }
     @Override
     public String toString() {
@@ -59,7 +57,7 @@ public class Pays {
         sb.append("id=").append(id);
         sb.append(", nom='").append(nom).append('\'');
         sb.append(", logo='").append(logo).append('\'');
-        sb.append(", championats=").append(championats);
+        sb.append(", championats=").append(championnats);
         sb.append('}');
         return sb.toString();
     }
