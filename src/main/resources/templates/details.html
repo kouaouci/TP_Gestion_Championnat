@@ -54,7 +54,7 @@
                 <tbody>
                 <tr>
                     <th scope="row">
-                        <img data-th-if="${equipe.logo} != null" width="35px" height="35px" data-th-src="@{/img/{logo}(logo=${equipe.logo})}" alt="">
+                        <img data-th-if="${equipe.logo} != null" width="35px" height="35px" data-th-src="@{/static/{logo}(logo=${equipe.logo})}" alt="">
                         <div class="form-group">
                       <span style="color: rgb(102, 101, 101); font-size: small">
                       <label class="form-control-label" for="equipeNom">Nom :</label>
@@ -116,7 +116,7 @@
                 <tr class="table-active">
                     <th scope="row">
                         Administratif<img
-                            src="/img/fleche.png"
+                            src="/static/fleche.png"
                             id="image1"
                             onclick="show1()"
                             style="max-width: 3%; float: right"
@@ -167,7 +167,7 @@
                             id="image2"
                             onclick="show2()"
                             style="max-width: 3%; float: right"
-                            src="/img/fleche.png"
+                            src="/static/fleche.png"
                     />
                     </th>
                 </tr>

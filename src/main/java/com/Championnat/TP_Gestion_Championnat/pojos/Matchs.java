@@ -1,8 +1,10 @@
 package com.Championnat.TP_Gestion_Championnat.pojos;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
+@Transactional
 public class Matchs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

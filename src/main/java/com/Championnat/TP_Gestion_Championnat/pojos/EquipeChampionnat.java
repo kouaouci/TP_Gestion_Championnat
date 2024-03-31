@@ -1,5 +1,7 @@
 package com.Championnat.TP_Gestion_Championnat.pojos;
 
+import org.springframework.transaction.annotation.Transactional;
+
 
 public class EquipeChampionnat {
 

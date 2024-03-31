@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,21 +29,31 @@
                                 <a data-th-href="@{/championnat/{id}/resultatsListe(id=${championnat.id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">liste des matchs</a>
                             </div>
                             <div class="col-4">
-                                <a data-th-href="@{'/details_championnat?idChampionnat=' + ${championnat.id}}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">classement</a>
+                                <a data-th-href="@{'/details_championnat?idChampionnat=' + ${championnat.id}}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">
+
+                                <span>classement</span>
+
+                                </a>
                             </div>
                         </div>
-                        <div class="bar-thin bg-light mt-2 mb-2" style="height: 2px;"></div>
+                        <div class="bar-thin bg-light mb-2" style="height: 2px;"></div>
                     </td>
                 </tr>
-                </tbody>
             </table>
-            <div class="col-12">
-                <a data-th-href="@{/championnat/newChampionnat}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">ajouter un championnat</a>
+            <div>
+                <a data-th-href="@{/championnat/newChampionnat}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">
+                    <span>ajouter un championnat</span>
+                </a>
             </div>
+
+
+
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+</div>
 </body>
 </html>

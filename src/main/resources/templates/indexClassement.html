@@ -20,7 +20,7 @@
                 class="table table-borderless"
                 style="background-color: rgb(134, 205, 233)"
         >
-            <div class="titre" data-th-text="${championat.nom}">Classement ligue 1 Uber Eats 2022-2023</div>
+            <div class="titre" data-th-text="${championnat.nom}">Classement ligue 1 Uber Eats 2022-2023</div>
             <table class="table">
                 <thead>
                 <tr>
@@ -43,7 +43,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-th-each="equipeStats,iter : ${ equipeChampionatStats }">
+                <tr data-th-each="equipeStats,iter : ${ equipeChampionnat }">
                     <th scope="row" data-th-text="${iter.index + 1}">1</th>
                     <td data-th-text="${equipeStats.equipe.nom}">Paris-SG</td>
                     <!--<td>1^fleche</td>-->

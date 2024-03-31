@@ -1,10 +1,12 @@
 package com.Championnat.TP_Gestion_Championnat.pojos;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Entity
+@Transactional
 public class Pays {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +50,8 @@ public class Pays {
         return championnats;
     }
 
-    public void setChampionats(List<Championnat> championats) {
-        this.championnats = championats;
+    public void setChampionats(List<Championnat> championnats) {
+        this.championnats = championnats;
     }
     @Override
     public String toString() {

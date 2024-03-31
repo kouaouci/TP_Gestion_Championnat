@@ -2,11 +2,13 @@ package com.Championnat.TP_Gestion_Championnat.pojos;
 
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Transactional
 
 public class Equipe {
     @Id
@@ -41,7 +43,7 @@ public class Equipe {
         this.status = status;
     }
     // relation exterieur
-   @ManyToMany(mappedBy = "equipes")
+   @ManyToMany(mappedBy = "equipes",fetch = FetchType.EAGER)
     private List<Championnat> championnats;
    @ManyToOne
     private Stade stade;

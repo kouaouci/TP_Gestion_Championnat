@@ -27,7 +27,7 @@ public class BlogChampionnatController {
     @Autowired
     private JourneeService journeeService;
     @Autowired
-    private  MatchService matchService;
+    private MatchService matchService;
     @Autowired
     private StadeService stadeService;
 
@@ -45,19 +45,16 @@ public class BlogChampionnatController {
         this.stadeService = stadeService;
     }
 
-      //User
-      @GetMapping({"/", "login"})
-      public String login() {
-          return "login";
-      }
-    @GetMapping({ "accueil"})
+    //User
+    @GetMapping({"/", "login"})
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping({"accueil"})
     public String accueil() {
         return "accueil";
     }
-
-
-
-
 
 
     @PostMapping({"logUser"})
@@ -105,6 +102,14 @@ public class BlogChampionnatController {
         return "details";
     }
 
+    @GetMapping({"equipe/newEquipe"})
+    public String newEquipe(Model model, @ModelAttribute Equipe equipe) {
+        List<Stade> stades = stadeService.recupererStadeAll();
+        model.addAttribute("allStades", stades);
+        model.addAttribute("equipe", equipe);
+        return "details";
+    }
+
     @PostMapping(value = "equipe/saveEquipe")
     public RedirectView saveEquipe(Model model, @Validated @ModelAttribute Equipe equipe, @RequestParam long stadeId) {
         Stade stade = stadeService.recupererStade(stadeId);
@@ -147,61 +152,62 @@ public class BlogChampionnatController {
     @GetMapping({"details_championnat"})
     public String details_championnat(Model model, @RequestParam long idChampionnat) {
         Championnat championnat = championnatService.recupererChampionnat(idChampionnat);
-        List<Equipe> equipes = championnat.getEquipes();
-        List<Journee> journees = championnat.getJournees();
-        journees.sort(Comparator.comparing(Journee::getNumero).reversed());
-        List<Matchs> matches = new ArrayList<>();
-        List<EquipeChampionnat> equipeChampionnat = new ArrayList<>();
-        for (Journee journee : journees) {
-            matches.addAll(journee.getMatches());
-        }
-        for (Equipe equipe : equipes) {
-            int totalPoint = 0;
-            Integer matchGagnee = 0;
-            Integer matchPerdu = 0;
-            Integer matchNul = 0;
-            Integer maxJournee = 0;
-            for (Matchs match : matches) {
-                if (equipe == match.getEquipe1()) {
-                    totalPoint += match.getPointEquipe1();
-                    if (match.getPointEquipe1() > match.getPointEquipe2()) {
-                        matchGagnee++;
-                    }
-                    if (match.getPointEquipe1() < match.getPointEquipe2()) {
-                        matchPerdu++;
-                    }
-                    if (match.getPointEquipe1() == match.getPointEquipe2()) {
-                        matchNul++;
-                    }
-                    if (maxJournee < match.getJournee().getNumero()) {
-                        maxJournee = match.getJournee().getNumero();
-                    }
-                }
-                if (equipe == match.getEquipe2()) {
-                    totalPoint += match.getPointEquipe2();
-                    if (match.getPointEquipe1() > match.getPointEquipe2()) {
-                        matchPerdu++;
-                    }
-                    if (match.getPointEquipe1() < match.getPointEquipe2()) {
-                        matchGagnee++;
-                    }
-                    if (match.getPointEquipe1() == match.getPointEquipe2()) {
-                        matchNul++;
-                    }
-                    if (maxJournee < match.getJournee().getNumero()) {
-                        maxJournee = match.getJournee().getNumero();
-                    }
+            List<Equipe> equipes = championnat.getEquipes();
+            List<Journee> journees = championnat.getJournees();
+            journees.sort(Comparator.comparing(Journee::getNumero).reversed());
+            List<Matchs> matches = new ArrayList<>();
+            List<EquipeChampionnat> equipeChampionnat = new ArrayList<>();
+            for (Journee journee : journees) {
+                for (Matchs match : journee.getMatches()) {
+                    matches.add(match);
                 }
             }
-            EquipeChampionnat equipeStats = new EquipeChampionnat(equipe, totalPoint, matchGagnee, matchPerdu, matchNul, maxJournee);
-            equipeChampionnat.add(equipeStats);
+            for (Equipe equipe : equipes) {
+                int totalPoint = 0;
+                Integer matchGagnee = 0;
+                Integer matchPerdu = 0;
+                Integer matchNul = 0;
+                Integer maxJournee = 0;
+                for (Matchs match : matches) {
+                    if (equipe == match.getEquipe1()) {
+                        totalPoint += match.getPointEquipe1();
+                        if (match.getPointEquipe1() > match.getPointEquipe2()) {
+                            matchGagnee++;
+                        }
+                        if (match.getPointEquipe1() < match.getPointEquipe2()) {
+                            matchPerdu++;
+                        }
+                        if (match.getPointEquipe1() == match.getPointEquipe2()) {
+                            matchNul++;
+                        }
+                        if (maxJournee < match.getJournee().getNumero()) {
+                            maxJournee = match.getJournee().getNumero();
+                        }
+                    }
+                    if (equipe == match.getEquipe2()) {
+                        totalPoint += match.getPointEquipe2();
+                        if (match.getPointEquipe1() > match.getPointEquipe2()) {
+                            matchPerdu++;
+                        }
+                        if (match.getPointEquipe1() < match.getPointEquipe2()) {
+                            matchGagnee++;
+                        }
+                        if (match.getPointEquipe1() == match.getPointEquipe2()) {
+                            matchNul++;
+                        }
+                        if (maxJournee < match.getJournee().getNumero()) {
+                            maxJournee = match.getJournee().getNumero();
+                        }
+                    }
+                }
+                EquipeChampionnat equipeStats = new EquipeChampionnat(equipe, totalPoint, matchGagnee, matchPerdu, matchNul, maxJournee);
+                equipeChampionnat.add(equipeStats);
+            }
+            equipeChampionnat.sort(Comparator.comparing(EquipeChampionnat::getTotalPoint).reversed());
+            model.addAttribute("championnat", championnat);
+            model.addAttribute("equipeChampionnat", equipeChampionnat);
+            return "indexClassement";
         }
-        equipeChampionnat.sort(Comparator.comparing(EquipeChampionnat::getTotalPoint).reversed());
-
-        model.addAttribute("championnat", championnat);
-        model.addAttribute("equipeChampionnat", equipeChampionnat);
-        return "indexClassement";
-    }
 
     @PostMapping({"championnat/{championnatId}/jours"})
     public RedirectView allMatchOfJourneeIdAndChampionnat(Model model, @RequestParam long championnatId, @RequestParam long journeeId) {
@@ -245,12 +251,12 @@ public class BlogChampionnatController {
         return "liste";
     }
 
-    @GetMapping({"/championnats"})
+    @GetMapping({"championnats"})
     public String championnats(Model model) {
         List<Championnat> championnats = championnatService.recupererChampionnatAll();
         model.addAttribute("championnats", championnats);
-        return "indexList" +
-                "Res";
+        return "indexListRes" ;
+
     }
 
     @GetMapping({"championnat/newChampionnat"})
@@ -313,21 +319,21 @@ public class BlogChampionnatController {
             paysService.ajouterPays(pays4);
 
             Championnat championat1 = new Championnat(
-                    "Ligue 1",
-                    "logo_ligue1.png",
+                    "coupe du monde",
+                    "logo_coupe_du_monde.png",
                     Date.valueOf("2021-08-01"),
                     Date.valueOf("2022-05-30"),
                     3,
                     0,
                     1,
-                    "Classement"
+                    "pool"
             );
             championat1.setPays(pays1);
             championnatService.ajouterChampionnat(championat1);
 
             Championnat championat2 = new Championnat(
                     "Bundesliga",
-                    "logo_bundesliga.png",
+                    "logo_allemagne.png",
                     Date.valueOf("2021-08-01"),
                     Date.valueOf("2022-05-30"),
                     3,
@@ -340,7 +346,7 @@ public class BlogChampionnatController {
 
             Championnat championat3 = new Championnat(
                     "La Liga",
-                    "logo_laliga.png",
+                    "logo_italie.png",
                     Date.valueOf("2021-08-01"),
                     Date.valueOf("2022-05-30"),
                     3,
@@ -398,7 +404,7 @@ public class BlogChampionnatController {
 
 
             Equipe equipe1 = new Equipe(
-                    "logo_psg.png",
+                    "logo_ol.png",
                     "Paris Saint Germain",
                     Date.valueOf("1970-01-01"),
                     "Actif",

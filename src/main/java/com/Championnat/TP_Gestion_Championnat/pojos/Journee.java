@@ -1,10 +1,12 @@
 package com.Championnat.TP_Gestion_Championnat.pojos;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Entity
+@Transactional
 public class Journee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +31,7 @@ public class Journee {
     }
     @ManyToOne
     private Championnat championnat;
-    @OneToMany(mappedBy="journee")
+    @OneToMany(mappedBy="journee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Matchs> matches;
 
     public Long getId() {

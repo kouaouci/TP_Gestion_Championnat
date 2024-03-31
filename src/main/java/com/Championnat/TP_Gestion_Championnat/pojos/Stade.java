@@ -1,11 +1,13 @@
 package com.Championnat.TP_Gestion_Championnat.pojos;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Transactional
 public class Stade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,20 +22,6 @@ public class Stade {
     @OneToMany(mappedBy = "stade")
     private List<Equipe> equipes;
 
-
-    //construccteur
-    public Stade() {
-    }
-
-    public Stade(String nom, String adresse, Integer capacite, String telephone) {
-        this.nom = nom;
-        this.adresse = adresse;
-        this.telephone = telephone;
-        this.capacite = capacite;
-    }
-
-
-    //getters and setters
     public Long getId() {
         return id;
     }
@@ -66,14 +54,42 @@ public class Stade {
         this.telephone = telephone;
     }
 
-    public int getCapacite() {
+    public Integer getCapacite() {
         return capacite;
-
     }
 
-    public void setCapacité(Integer capacite) {
+    public void setCapacite(Integer capacite) {
         this.capacite = capacite;
-
     }
+
+    public List<Matchs> getMatches() {
+        return matches;
+    }
+
+    public void setMatches(List<Matchs> matches) {
+        this.matches = matches;
+    }
+
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
+    }
+
+    //construccteur
+    public Stade() {
+    }
+
+    public Stade(String nom, String adresse, Integer capacite, String telephone) {
+        this.nom = nom;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.capacite = capacite;
+    }
+
+
+    //getters and setters
 
 }

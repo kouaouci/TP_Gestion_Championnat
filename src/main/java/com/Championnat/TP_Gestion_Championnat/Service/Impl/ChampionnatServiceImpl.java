@@ -7,6 +7,7 @@ import com.Championnat.TP_Gestion_Championnat.dao.JourneeDao;
 import com.Championnat.TP_Gestion_Championnat.pojos.Championnat;
 import com.Championnat.TP_Gestion_Championnat.pojos.Equipe;
 import com.Championnat.TP_Gestion_Championnat.pojos.Journee;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,18 @@ public class ChampionnatServiceImpl  implements ChampionnatService {
 
     @Override
     public Championnat recupererChampionnat(Long idChampionnat) {
-        return
-                championnatDao.findById(idChampionnat).orElse(null);
+
+//         if(championnatDao.findById(idChampionnat).isPresent()){
+//             Hibernate.initialize(championnatDao.findById(idChampionnat).get().getEquipes());
+//             Hibernate.initialize(championnatDao.findById(idChampionnat).get().getJournees());
+//              for (Journee journee:championnatDao.findById(idChampionnat).get().getJournees()){
+//                  Hibernate.initialize(journee.getMatches());
+//              }
+//             return championnatDao.findById(idChampionnat).get();
+//         }
+
+
+    return  championnatDao.findById(idChampionnat).orElse(null);
     }
     @Override
     public List<Championnat> recupererChampionnatAll() {

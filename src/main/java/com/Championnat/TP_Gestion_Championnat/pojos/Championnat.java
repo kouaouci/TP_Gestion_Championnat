@@ -2,11 +2,13 @@ package com.Championnat.TP_Gestion_Championnat.pojos;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Transactional
 public class Championnat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +38,7 @@ public class Championnat {
     //relation
     @ManyToOne
     private Pays pays;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
 
     private List<Equipe> equipes;
     @OneToMany(mappedBy="championnat",fetch = FetchType.EAGER)
