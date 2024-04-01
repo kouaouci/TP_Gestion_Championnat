@@ -21,7 +21,7 @@
 <div class="container">
     <a href="/equipe/newEquipe" class="btn btn-primary my-3">Ajouter une équipe</a>
 
-    <form action="/equipe/saveEquipe" method="post" th:object="${equipe}">
+    <form th:action="@{/equipe/{idEquipe}/detail(idEquipe=${idEquipe})}" method="post" th:object="${equipe}">
         <input type="hidden" th:field="*{id}">
         <table class="table table-borderless">
             <tbody>
@@ -29,7 +29,7 @@
                 <td class="align-middle">
                     <img th:if="${equipe.logo != null}" width="60   px" height="60px" data-th-src="@{'/img/' + ${equipe.logo}}" alt="">
                     <div class="form-group">
-                        <label class="form-control-label" for="equipe.nom">Nom :</label>
+                        <label class="form-control-label" for="nom">Nom :</label>
                         <div class="input-group">
                             <input type="text" class="form-control" th:field="*{nom}">
                         </div>
@@ -147,11 +147,11 @@
             </tbody>
         </table>
         <button type="submit" class="btn btn-primary">Envoyer</button>
+        <br><br><br>
     </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-</body>
 <!-- Include the footer -->
 <div id="footer"></div>
 <script>
@@ -161,4 +161,5 @@
             document.getElementById('footer').innerHTML = data;
         });
 </script>
+</body>
 </html>

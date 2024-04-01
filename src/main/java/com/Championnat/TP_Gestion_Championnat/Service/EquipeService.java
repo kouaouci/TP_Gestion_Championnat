@@ -8,6 +8,7 @@ public interface EquipeService {
 
     Equipe ajouterEquipe(Equipe equipe);
     Equipe recupererEquipe(Long idEquipe);
+    void updateEquipe(Equipe equipe);
 
     Equipe recupererEquipe(String nom);
 

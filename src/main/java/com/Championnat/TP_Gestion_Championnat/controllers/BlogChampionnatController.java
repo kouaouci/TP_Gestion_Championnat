@@ -139,6 +139,12 @@ public class BlogChampionnatController {
         return "detailsEquipe";
     }
 
+    @PostMapping("/equipe/{idEquipe}/detail")
+    public String mettreAJourDetailsEquipe(@ModelAttribute("equipe") Equipe equipeModifiee) {
+        equipeService.updateEquipe(equipeModifiee);
+        return "redirect:/equipe/{idEquipe}/detail";
+    }
+
     @GetMapping({"equipe/newEquipe"})
     public String newEquipe(Model model, @ModelAttribute Equipe equipe) {
         List<Stade> stades = stadeService.recupererStadeAll();
