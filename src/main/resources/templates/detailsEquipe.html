@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team name details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Include the header -->
+<div id="header"></div>
+<script>
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header').innerHTML = data;
+        });
+</script>
+
+<div class="container">
+    <a href="/equipe/newEquipe" class="btn btn-primary my-3">Ajouter une équipe</a>
+
+    <form action="/equipe/saveEquipe" method="post" th:object="${equipe}">
+        <input type="hidden" th:field="*{id}">
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td class="align-middle">
+                    <img th:if="${equipe.logo != null}" width="60   px" height="60px" data-th-src="@{'/img/' + ${equipe.logo}}" alt="">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipe.nom">Nom :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{nom}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipeDate">Fondé en :</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" th:field="*{dateCreation}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipePresident">Président :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{president}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipeEntraineur">Entraîneur :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{nomEntrainneur}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipeTelephone">Téléphone :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{telephone}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="table-active">
+                <td>
+                    Administratif
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipeSiteWeb">Site Web :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{siteWeb}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipeStatus">Status :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{status}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="equipeSiege">Siège :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{siege}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="table-active content-holder">
+                <td>
+                    Stade
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <div class="form-group">
+                        <label class="form-control-label" for="stade">Stade :</label>
+                        <select class="form-select" id="stade" name="stadeId" th:field="*{stade}">
+                            <option th:each="unStade : ${allStades}" th:value="${unStade.id}" th:text="${unStade.nom}"></option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <span style="color: rgb(102, 101, 101); font-size: small">Capacité :</span>
+                    <span th:text="*{stade.capacite}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <span style="color: rgb(102, 101, 101); font-size: small">Adresse du stade :</span>
+                    <span th:text="*{stade.adresse}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <span style="color: rgb(102, 101, 101); font-size: small">Tel. Stade :</span>
+                    <span th:text="*{stade.telephone}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+<!-- Include the footer -->
+<div id="footer"></div>
+<script>
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer').innerHTML = data;
+        });
+</script>
+</html>

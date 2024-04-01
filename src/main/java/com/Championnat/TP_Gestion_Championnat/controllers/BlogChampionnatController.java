@@ -136,7 +136,7 @@ public class BlogChampionnatController {
 
         model.addAttribute("equipe", equipe);
 
-        return "details";
+        return "detailsEquipe";
     }
 
     @GetMapping({"equipe/newEquipe"})
@@ -144,7 +144,7 @@ public class BlogChampionnatController {
         List<Stade> stades = stadeService.recupererStadeAll();
         model.addAttribute("allStades", stades);
         model.addAttribute("equipe", equipe);
-        return "details";
+        return "detailsEquipe";
     }
 
     @PostMapping(value = "equipe/saveEquipe")
@@ -362,7 +362,7 @@ public class BlogChampionnatController {
             paysService.ajouterPays(pays4);
 
             Championnat championat1 = new Championnat(
-                    "coupe du monde",
+                    "Coupe du monde",
                     "logo_coupe_du_monde.png",
                     Date.valueOf("2021-08-01"),
                     Date.valueOf("2022-05-30"),

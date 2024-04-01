@@ -38,13 +38,12 @@
                                 <h5 data-th-text="${championnat.nom}">Coupe du monde</h5>
                             </div>
                             <div class="col-3">
-                                <a data-th-href="@{/championnat/{id}/resultatsListe(id=${championnat.id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Liste des matchs</a>
+                                <a href="@{/championnat/{id}/resultatsListe(id=${championnat.id})}" class="btn btn-sm btn-secondary active" role="button" aria-pressed="true">Liste des matchs</a>
                             </div>
-                            <div class="col-4">
-                                <a data-th-href="@{'/details_championnat?idChampionnat=' + ${championnat.id}}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">
-                                    <span>Classement</span>
-                                </a>
+                            <div class="col-3">
+                                <a href="@{'/details_championnat?idChampionnat=' + ${championnat.id}}" class="btn btn-sm btn-secondary active" role="button" aria-pressed="true">Classement</a>
                             </div>
+
                         </div>
                         <div class="bar-thin bg-light mb-2" style="height: 2px;"></div>
                     </td>
@@ -65,7 +64,7 @@
 <!-- Include the footer -->
 <div id="footer"></div>
 <script>
-    fetch('footer.html')
+    fetch('/footer.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('footer').innerHTML = data;
