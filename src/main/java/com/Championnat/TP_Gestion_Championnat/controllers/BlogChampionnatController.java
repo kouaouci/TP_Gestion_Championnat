@@ -46,13 +46,15 @@ public class BlogChampionnatController {
     }
 
     //User
-    @GetMapping({"/", "login"})
+    @GetMapping({ "login"})
     public String login() {
         return "login";
     }
 
-    @GetMapping({"accueil"})
-    public String accueil() {
+    @GetMapping({"/","accueil"})
+    public String accueil(Model model) {
+        List<Championnat> championnats = championnatService.recupererChampionnatAll();
+        model.addAttribute("championnats", championnats);
         return "accueil";
     }
 
@@ -333,7 +335,7 @@ public class BlogChampionnatController {
 
             Championnat championat2 = new Championnat(
                     "Bundesliga",
-                    "logo_allemagne.png",
+                    "logo_bundesliga.png",
                     Date.valueOf("2021-08-01"),
                     Date.valueOf("2022-05-30"),
                     3,
@@ -346,7 +348,7 @@ public class BlogChampionnatController {
 
             Championnat championat3 = new Championnat(
                     "La Liga",
-                    "logo_italie.png",
+                    "logo_liga.png",
                     Date.valueOf("2021-08-01"),
                     Date.valueOf("2022-05-30"),
                     3,

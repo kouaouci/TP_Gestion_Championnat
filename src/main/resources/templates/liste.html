@@ -61,7 +61,7 @@
                             <span class="equipe link" data-th-text="${match.equipe1.nom}">Équipe A</span>
                             <img
                                     class="logoA"
-                                    data-th-src="@{/img/{logo}(logo=${match.equipe1.logo})}"
+                                    data-th-src="@{/img2/{logo}(logo=${match.equipe1.logo})}"
                                     alt="Logo de l'équipe A"
                             />
                         </a>
@@ -72,7 +72,7 @@
                         <a data-th-href="@{/equipe/{id}/detail(id=${match.equipe2.id})}">
                             <img
                                     class="logoB"
-                                    data-th-src="@{/img/{logo}(logo=${match.equipe2.logo})}"
+                                    data-th-src="@{/img2/{logo}(logo=${match.equipe2.logo})}"
                                     alt="Logo de l'équipe B"
                             />
                             <span class="equipe link" data-th-text="${match.equipe2.nom}">equipe link B</span>
