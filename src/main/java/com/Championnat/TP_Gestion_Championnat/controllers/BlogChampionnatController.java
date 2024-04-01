@@ -3,11 +3,15 @@ package com.Championnat.TP_Gestion_Championnat.controllers;
 import com.Championnat.TP_Gestion_Championnat.Service.*;
 import com.Championnat.TP_Gestion_Championnat.pojos.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.sql.Date;
@@ -59,24 +63,39 @@ public class BlogChampionnatController {
     }
 
 
-    @PostMapping({"logUser"})
-    public RedirectView logUser(Model model, @RequestParam String uname, @RequestParam String psw) {
+    @PostMapping("/logUser")
+    public RedirectView logUser(Model model, HttpSession session, @RequestParam String uname, @RequestParam String psw) {
         List<User> users = userService.recupererUserAll();
         boolean connected = false;
+        String pseudo = null;
         for (User userOfBdd : users) {
             if (Objects.equals(uname, userOfBdd.getLogin()) && Objects.equals(psw, userOfBdd.getMdp())) {
                 connected = true;
+                pseudo = userOfBdd.getPseudo(); // Get the username
                 break;
             }
         }
 
         if (connected) {
+            // Store username in session
+            session.setAttribute("pseudo", pseudo);
             return new RedirectView("accueil");
-
         } else {
             return new RedirectView("");
         }
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // Récupérer la session actuelle et l'invalider
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        // Rediriger vers la page d'accueil ou toute autre page après la déconnexion
+        return "redirect:/";
+    }
+
 
     @GetMapping({"addUser"})
     public String addUser() {
@@ -85,13 +104,29 @@ public class BlogChampionnatController {
 
     @PostMapping({"saveUser"})
     public RedirectView saveUser(Model model, @RequestParam String uname, @RequestParam String psw) {
-        User user = new User();
-        user.setLogin(uname);
-        user.setMdp(psw);
-        userService.ajouterUser(user);
-        return new RedirectView("/");
+        RedirectAttributes attributes = new RedirectAttributesModelMap();
+        try {
 
+            User user = new User();
+            user.setLogin(uname);
+            user.setMdp(psw);
+            userService.ajouterUser(user);
+
+            attributes.addFlashAttribute("success", "User created successfully!");
+        } catch (Exception e) {
+            attributes.addFlashAttribute("error", "An error occurred while creating the user.");
+            e.printStackTrace(); // Log the exception for debugging
+        }
+        return new RedirectView("/");
     }
+
+    @GetMapping({"equipes"})
+    public String listeEquipes(Model model, @ModelAttribute Stade stade) {
+        List<Equipe> equipes = equipeService.recupererEquipeAll();
+        model.addAttribute("equipes", equipes);
+        return "listeEquipes";
+    }
+
 
     @GetMapping({"equipe/{idEquipe}/detail"})
     public String details_equipe(Model model, @PathVariable long idEquipe) {
@@ -300,6 +335,12 @@ public class BlogChampionnatController {
             user2.setEmail("allin.delong@gmail.com");
             userService.ajouterUser(user2);
 
+            User user3 = new User();
+            user3.setLogin("root");
+            user3.setMdp("root");
+            user3.setPseudo("Admin");
+            userService.ajouterUser(user3);
+
             Pays pays1 = new Pays();
             pays1.setNom("France");
             pays1.setLogo("logo_france.png");
@@ -307,7 +348,7 @@ public class BlogChampionnatController {
 
             Pays pays2 = new Pays();
             pays2.setNom("Allemagne");
-            pays2.setLogo("logo_allemagne.png");
+            pays2.setLogo("logo_germany.png");
             paysService.ajouterPays(pays2);
 
             Pays pays3 = new Pays();
@@ -404,27 +445,70 @@ public class BlogChampionnatController {
             );
             stadeService.ajouterStade(stade4);
 
+            Stade stade6 = new Stade(
+                    "Allianz Arena",
+                    "Munich",
+                    75000,
+                    "www.allianz-arena.de"
+            );
+            stadeService.ajouterStade(stade6);
+
+            Stade stade7 = new Stade(
+                    "Estádio do Maracanã",
+                    "Rio de Janeiro",
+                    78838,
+                    "www.maracana.com"
+            );
+            stadeService.ajouterStade(stade7);
+
+
 
             Equipe equipe1 = new Equipe(
-                    "logo_ol.png",
-                    "Paris Saint Germain",
-                    Date.valueOf("1970-01-01"),
-                    "Actif",
-                    stade1.getId(),
-                    "Mauricio Pochettino",
-                    "Nasser Al-Khelaïfi",
-                    "Paris",
-                    "0144556677",
-                    "www.psg.fr"
+                    "logo_france.png", // Nom du logo de l'équipe
+                    "France", // Nom de l'équipe
+                    Date.valueOf("1904-04-06"), // Date de fondation de l'équipe
+                    "Actif", // Statut de l'équipe
+                    stade1.getId(), // ID du stade de l'équipe
+                    "Didier Deschamps", // Nom de l'entraîneur
+                    "Noël Le Graët", // Nom du président
+                    "France", // Pays d'origine de l'équipe
+                    "0123456789", // Numéro de téléphone de l'équipe
+                    "www.fff.fr" // Site web de l'équipe
             );
             equipe1.setStade(stade4);
             equipeService.ajouterEquipe(equipe1);
 
+            Equipe equipe2 = new Equipe(
+                    "logo_brazil.png",
+                    "Brésil",
+                    Date.valueOf("1914-07-21"),
+                    "Actif",
+                    stade1.getId(),
+                    "Tite",
+                    "Rogerio Caboclo",
+                    "Brésil",
+                    "0123456789",
+                    "www.cbf.com.br"
+            );
+            equipe2.setStade(stade7);
+            equipeService.ajouterEquipe(equipe2);
+
+            Equipe equipe4 = new Equipe(
+                    "logo_germany.png",
+                    "Allemagne",
+                    Date.valueOf("1900-01-28"),
+                    "Actif",
+                    stade1.getId(),
+                    "Hans-Dieter Flick",
+                    "Fritz Keller",
+                    "Allemagne",
+                    "0123456789",
+                    "www.dfb.de"
+            );
+            equipe4.setStade(stade6);
+            equipeService.ajouterEquipe(equipe4);
 
 
-
-
-            
 
             System.out.println("Initialisation des données terminée.");
         }
